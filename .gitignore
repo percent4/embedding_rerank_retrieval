@@ -1,0 +1,4 @@
+.ipynb_checkpoints
+.idea
+evaluation/*.html
+*/__pycache__
