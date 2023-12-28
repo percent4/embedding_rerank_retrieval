@@ -41,7 +41,7 @@ class EmbeddingCache(object):
         self.build_with_context("corpus")
 
     @staticmethod
-    def load():
+    def load(query_write=False):
         queries_embedding_data = np.load("../data/queries_openai_embedding.npy")
         corpus_embedding_data = np.load("../data/corpus_openai_embedding.npy")
         query_embedding_dict = {}
@@ -51,6 +51,16 @@ class EmbeddingCache(object):
         corpus = list(content["corpus"].values())
         for i in range(len(queries)):
             query_embedding_dict[queries[i]] = queries_embedding_data[i].tolist()
+        if query_write:
+            rewrite_queries_embedding_data = np.load("../data/query_rewrite_openai_embedding.npy")
+            with open("../data/query_rewrite.json", "r", encoding="utf-8") as f:
+                rewrite_content = json.loads(f.read())
+
+            rewrite_queries_list = []
+            for original_query, rewrite_queries in rewrite_content.items():
+                rewrite_queries_list.extend(rewrite_queries)
+            for i in range(len(rewrite_queries_list)):
+                query_embedding_dict[rewrite_queries_list[i]] = rewrite_queries_embedding_data[i].tolist()
         return query_embedding_dict, corpus_embedding_data, corpus
 
 

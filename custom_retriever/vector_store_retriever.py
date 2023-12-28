@@ -16,11 +16,11 @@ from custom_retriever.build_embedding_cache import EmbeddingCache
 
 
 class VectorSearchRetriever(BaseRetriever):
-    def __init__(self, top_k, faiss_index) -> None:
+    def __init__(self, top_k, faiss_index, query_rewrite=False) -> None:
         super().__init__()
         self.top_k = top_k
         self.faiss_index = faiss_index
-        self.queries_embedding_dict, self.corpus_embedding, self.corpus = EmbeddingCache().load()
+        self.queries_embedding_dict, self.corpus_embedding, self.corpus = EmbeddingCache().load(query_write=query_rewrite)
         # add vector
         self.faiss_index.add(self.corpus_embedding)
 

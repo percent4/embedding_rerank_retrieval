@@ -4,7 +4,7 @@ import pandas as pd
 import plotly as py
 import plotly.graph_objs as go
 
-metric = "mrr"
+metric = "hit_rate"
 
 x_list = [f"top_{k}_retrieve" for k in range(1, 6)]
 

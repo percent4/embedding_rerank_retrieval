@@ -15,6 +15,7 @@ from custom_retriever.bm25_retriever import CustomBM25Retriever
 from custom_retriever.vector_store_retriever import VectorSearchRetriever
 from custom_retriever.ensemble_retriever import EnsembleRetriever
 from custom_retriever.ensemble_rerank_retriever import EnsembleRerankRetriever
+from custom_retriever.query_rewrite_ensemble_retriever import QueryRewriteEnsembleRetriever
 
 
 # Display results from evaluate.
@@ -111,7 +112,7 @@ evaluation_name_list = []
 evaluation_result_list = []
 cost_time_list = []
 
-for top_k in [3]:
+for top_k in [1, 2, 3, 4, 5]:
     start_time = time.time()
     faiss_index = IndexFlatIP(1536)
     ensemble_rerank_retriever = EnsembleRerankRetriever(top_k=top_k, faiss_index=faiss_index)
@@ -129,3 +130,27 @@ for top_k in [3]:
     df['cost_time'] = cost_time_list
     print(df.head())
     df.to_csv(f"evaluation_ensemble_rerank_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+
+# query rewrite ensemble retrieve
+# evaluation_name_list = []
+# evaluation_result_list = []
+# cost_time_list = []
+#
+# for top_k in [1, 2, 3, 4, 5]:
+#     start_time = time.time()
+#     faiss_index = IndexFlatIP(1536)
+#     query_rewrite_ensemble_retriever = QueryRewriteEnsembleRetriever(top_k=top_k, faiss_index=faiss_index, weights=[1/6] * 6)
+#     query_rewrite_ensemble_retriever_evaluator = RetrieverEvaluator.\
+#         from_metric_names(metrics, retriever=query_rewrite_ensemble_retriever)
+#     query_rewrite_ensemble_eval_results = asyncio.run(query_rewrite_ensemble_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
+#     evaluation_name_list.append(f"query_rewrite_ensemble_top_{top_k}_eval")
+#     evaluation_result_list.append(query_rewrite_ensemble_eval_results)
+#     faiss_index.reset()
+#     cost_time_list.append((time.time() - start_time) * 1000)
+#
+# print("done for query_rewrite ensemble evaluation!")
+# df = display_results(evaluation_name_list, evaluation_result_list)
+# df['cost_time'] = cost_time_list
+# print(df.head())
+# df.to_csv(f"evaluation_query_rewrite_ensemble_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+
