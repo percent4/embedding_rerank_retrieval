@@ -7,6 +7,8 @@ Retrieve Method：
 - Ensemble Retriever
 - Ensemble Retriever + Cohere Rerank
 
+参考文章：[NLP（八十二）RAG框架中的Retrieve算法评估](https://mp.weixin.qq.com/s?__biz=MzU2NTYyMDk5MQ==&mid=2247486199&idx=1&sn=f24175b05bdf5bc6dd42efed4d5acae8&chksm=fcb9b367cbce3a711fabd1a56bb5b9d803aba2f42964b4e1f9a4dc6e2174f0952ddb9e1d4c55&token=1977141018&lang=zh_CN#rd)
+
 ## 数据
 
 ## 评估结果
@@ -50,6 +52,10 @@ Ensemble Retriever + Rerank Evaluation:
 | ensemble_rerank_top_3_eval | 0.9345794392523364 | 0.9008307372793353 | 2200800.935983658 |
 | ensemble_rerank_top_4_eval | 0.9470404984423676 | 0.9078400830737278 | 2150398.734807968 |
 | ensemble_rerank_top_5_eval | 0.9657320872274143 | 0.9098650051921081 | 2149122.938156128 |
+
+![Hit Rate](https://s2.loli.net/2023/12/28/5VjRy7rCeXOtAZq.png)
+
+![MRR](https://s2.loli.net/2023/12/28/s9SvU4kL7Zc1MK5.png)
 
 ## 改进方案
 

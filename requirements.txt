@@ -1,0 +1,10 @@
+cohere==4.39
+elasticsearch==7.17.0
+faiss-cpu==1.7.4
+llama-index==0.9.21
+numpy==1.26.2
+pandas==2.1.4
+plotly==5.18.0
+Requests==2.31.0
+retry==0.9.2
+tqdm==4.66.1
