@@ -12,7 +12,7 @@ from llama_index.indices.query.schema import QueryBundle, QueryType
 from preprocess.get_text_id_mapping import text_node_id_mapping
 from custom_retriever.bm25_retriever import CustomBM25Retriever
 from custom_retriever.vector_store_retriever import VectorSearchRetriever
-from utils.cohere_rerank import cohere_rerank_result
+from utils.rerank import bge_rerank_result
 
 
 class EnsembleRerankRetriever(BaseRetriever):
@@ -38,7 +38,7 @@ class EnsembleRerankRetriever(BaseRetriever):
             for doc in doc_list:
                 all_documents.add(doc)
         doc_lists = list(all_documents)
-        rerank_doc_lists = cohere_rerank_result(query.query_str, doc_lists, top_n=self.top_k)
+        rerank_doc_lists = bge_rerank_result(query.query_str, doc_lists, top_n=self.top_k)
         result = []
         for sorted_doc in rerank_doc_lists:
             text, score = sorted_doc

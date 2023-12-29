@@ -2,3 +2,4 @@
 .idea
 evaluation/*.html
 */__pycache__
+evaluation/tmp*

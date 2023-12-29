@@ -129,7 +129,7 @@ for top_k in [1, 2, 3, 4, 5]:
     df = display_results(evaluation_name_list, evaluation_result_list)
     df['cost_time'] = cost_time_list
     print(df.head())
-    df.to_csv(f"evaluation_ensemble_rerank_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+    df.to_csv(f"evaluation_ensemble-rerank-bge-base_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # query rewrite ensemble retrieve
 # evaluation_name_list = []
