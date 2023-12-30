@@ -6,6 +6,8 @@ Retrieve Method：
 - Embedding Retriever
 - Ensemble Retriever
 - Ensemble Retriever + Cohere Rerank
+- Ensemble Retriever + BGE-BASE Rerank
+- Ensemble Retriever + BGE-LARGE Rerank
 
 参考文章：[NLP（八十二）RAG框架中的Retrieve算法评估](https://mp.weixin.qq.com/s?__biz=MzU2NTYyMDk5MQ==&mid=2247486199&idx=1&sn=f24175b05bdf5bc6dd42efed4d5acae8&chksm=fcb9b367cbce3a711fabd1a56bb5b9d803aba2f42964b4e1f9a4dc6e2174f0952ddb9e1d4c55&token=1977141018&lang=zh_CN#rd)
 
@@ -56,6 +58,34 @@ Ensemble Retriever + Rerank Evaluation:
 ![Hit Rate](https://s2.loli.net/2023/12/28/5VjRy7rCeXOtAZq.png)
 
 ![MRR](https://s2.loli.net/2023/12/28/s9SvU4kL7Zc1MK5.png)
+
+## 不同Rerank算法之间的比较
+
+bge-rerank-base:
+
+| retrievers                          | hit_rate | mrr    |
+|-------------------------------------|----------|--------|
+| ensemble_bge_base_rerank_top_1_eval | 0.8255   | 0.8255 |
+| ensemble_bge_base_rerank_top_2_eval | 0.8785   | 0.8489 |
+| ensemble_bge_base_rerank_top_3_eval | 0.9346   | 0.8686 |
+| ensemble_bge_base_rerank_top_4_eval | 0.947    | 0.872  |
+| ensemble_bge_base_rerank_top_5_eval | 0.9564   | 0.8693 |
+
+bge-rerank-large:
+
+| retrievers                           | hit_rate | mrr    |
+|--------------------------------------|----------|--------|
+| ensemble_bge_large_rerank_top_1_eval | 0.8224   | 0.8224 |
+| ensemble_bge_large_rerank_top_2_eval | 0.8847   | 0.8364 |
+| ensemble_bge_large_rerank_top_3_eval | 0.9377   | 0.8572 |
+| ensemble_bge_large_rerank_top_4_eval | 0.9502   | 0.8564 |
+| ensemble_bge_large_rerank_top_5_eval | 0.9626   | 0.8537 |
+
+![不同Rerank模型的Hit Rate](https://s2.loli.net/2023/12/29/vsuXBtbLdaVDS39.png)
+
+## 可视化分析
+
+![retrieval_website.png](https://s2.loli.net/2023/12/30/mZkJ37KRHTFSsyO.png)
 
 ## 改进方案
 

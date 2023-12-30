@@ -42,17 +42,18 @@ class EmbeddingCache(object):
 
     @staticmethod
     def load(query_write=False):
-        queries_embedding_data = np.load("../data/queries_openai_embedding.npy")
-        corpus_embedding_data = np.load("../data/corpus_openai_embedding.npy")
+        current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        queries_embedding_data = np.load(os.path.join(current_dir, "data/queries_openai_embedding.npy"))
+        corpus_embedding_data = np.load(os.path.join(current_dir, "data/corpus_openai_embedding.npy"))
         query_embedding_dict = {}
-        with open("../data/doc_qa_test.json", "r", encoding="utf-8") as f:
+        with open(os.path.join(current_dir, "data/doc_qa_test.json"), "r", encoding="utf-8") as f:
             content = json.loads(f.read())
         queries = list(content["queries"].values())
         corpus = list(content["corpus"].values())
         for i in range(len(queries)):
             query_embedding_dict[queries[i]] = queries_embedding_data[i].tolist()
         if query_write:
-            rewrite_queries_embedding_data = np.load("../data/query_rewrite_openai_embedding.npy")
+            rewrite_queries_embedding_data = np.load(os.path.join(current_dir, "data/query_rewrite_openai_embedding.npy"))
             with open("../data/query_rewrite.json", "r", encoding="utf-8") as f:
                 rewrite_content = json.loads(f.read())
 
