@@ -32,7 +32,10 @@ class VectorSearchRetriever(BaseRetriever):
 
         result = []
         # vector search
-        query_embedding = self.queries_embedding_dict[query.query_str]
+        if query.query_str in self.queries_embedding_dict:
+            query_embedding = self.queries_embedding_dict[query.query_str]
+        else:
+            query_embedding = EmbeddingCache().get_openai_embedding(req_text=query.query_str)
         distances, doc_indices = self.faiss_index.search(np.array([query_embedding]), self.top_k)
 
         for i, sent_index in enumerate(doc_indices.tolist()[0]):
@@ -45,9 +48,11 @@ class VectorSearchRetriever(BaseRetriever):
 
 
 if __name__ == '__main__':
+    from pprint import pprint
     from faiss import IndexFlatIP
     faiss_index = IndexFlatIP(1536)
-    vector_search_retriever = VectorSearchRetriever(top_k=2, faiss_index=faiss_index)
-    t_result = vector_search_retriever.retrieve(str_or_query_bundle="索尼1953年引入的技术专利是什么？")
-    print(t_result)
+    vector_search_retriever = VectorSearchRetriever(top_k=3, faiss_index=faiss_index)
+    query = "半导体制造设备市场美国占多少份额？"
+    t_result = vector_search_retriever.retrieve(str_or_query_bundle=query)
+    pprint(t_result)
     faiss_index.reset()

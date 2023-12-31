@@ -108,30 +108,6 @@ metrics = ["mrr", "hit_rate"]
 # df.to_csv(f"evaluation_ensemble_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # ensemble rerank retrieve
-evaluation_name_list = []
-evaluation_result_list = []
-cost_time_list = []
-
-for top_k in [1, 2, 3, 4, 5]:
-    start_time = time.time()
-    faiss_index = IndexFlatIP(1536)
-    ensemble_rerank_retriever = EnsembleRerankRetriever(top_k=top_k, faiss_index=faiss_index)
-    ensemble_rerank_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics,
-                                                                               retriever=ensemble_rerank_retriever)
-    ensemble_rerank_eval_results = asyncio.run(ensemble_rerank_retriever_evaluator.aevaluate_dataset(doc_qa_dataset,
-                                                                                                     show_progress=True))
-    evaluation_name_list.append(f"ensemble_rerank_top_{top_k}_eval")
-    evaluation_result_list.append(ensemble_rerank_eval_results)
-    faiss_index.reset()
-    cost_time_list.append((time.time() - start_time) * 1000)
-
-    print("done for ensemble_rerank evaluation!")
-    df = display_results(evaluation_name_list, evaluation_result_list)
-    df['cost_time'] = cost_time_list
-    print(df.head())
-    df.to_csv(f"evaluation_ensemble-rerank-bge-base_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
-
-# query rewrite ensemble retrieve
 # evaluation_name_list = []
 # evaluation_result_list = []
 # cost_time_list = []
@@ -139,18 +115,42 @@ for top_k in [1, 2, 3, 4, 5]:
 # for top_k in [1, 2, 3, 4, 5]:
 #     start_time = time.time()
 #     faiss_index = IndexFlatIP(1536)
-#     query_rewrite_ensemble_retriever = QueryRewriteEnsembleRetriever(top_k=top_k, faiss_index=faiss_index, weights=[1/6] * 6)
-#     query_rewrite_ensemble_retriever_evaluator = RetrieverEvaluator.\
-#         from_metric_names(metrics, retriever=query_rewrite_ensemble_retriever)
-#     query_rewrite_ensemble_eval_results = asyncio.run(query_rewrite_ensemble_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
-#     evaluation_name_list.append(f"query_rewrite_ensemble_top_{top_k}_eval")
-#     evaluation_result_list.append(query_rewrite_ensemble_eval_results)
+#     ensemble_rerank_retriever = EnsembleRerankRetriever(top_k=top_k, faiss_index=faiss_index)
+#     ensemble_rerank_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics,
+#                                                                                retriever=ensemble_rerank_retriever)
+#     ensemble_rerank_eval_results = asyncio.run(ensemble_rerank_retriever_evaluator.aevaluate_dataset(doc_qa_dataset,
+#                                                                                                      show_progress=True))
+#     evaluation_name_list.append(f"ensemble_rerank_top_{top_k}_eval")
+#     evaluation_result_list.append(ensemble_rerank_eval_results)
 #     faiss_index.reset()
 #     cost_time_list.append((time.time() - start_time) * 1000)
 #
-# print("done for query_rewrite ensemble evaluation!")
-# df = display_results(evaluation_name_list, evaluation_result_list)
-# df['cost_time'] = cost_time_list
-# print(df.head())
-# df.to_csv(f"evaluation_query_rewrite_ensemble_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+#     print("done for ensemble_rerank evaluation!")
+#     df = display_results(evaluation_name_list, evaluation_result_list)
+#     df['cost_time'] = cost_time_list
+#     print(df.head())
+#     df.to_csv(f"evaluation_ensemble-rerank-bge-base_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+
+# query rewrite ensemble retrieve
+evaluation_name_list = []
+evaluation_result_list = []
+cost_time_list = []
+
+for top_k in [1, 2, 3, 4, 5]:
+    start_time = time.time()
+    faiss_index = IndexFlatIP(1536)
+    query_rewrite_ensemble_retriever = QueryRewriteEnsembleRetriever(top_k=top_k, faiss_index=faiss_index)
+    query_rewrite_ensemble_retriever_evaluator = RetrieverEvaluator.\
+        from_metric_names(metrics, retriever=query_rewrite_ensemble_retriever)
+    query_rewrite_ensemble_eval_results = asyncio.run(query_rewrite_ensemble_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
+    evaluation_name_list.append(f"query-rewrite-ensemble_top_{top_k}_eval")
+    evaluation_result_list.append(query_rewrite_ensemble_eval_results)
+    faiss_index.reset()
+    cost_time_list.append((time.time() - start_time) * 1000)
+
+print("done for query_rewrite ensemble evaluation!")
+df = display_results(evaluation_name_list, evaluation_result_list)
+df['cost_time'] = cost_time_list
+print(df.head())
+df.to_csv(f"evaluation_query-rewrite-ensemble_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 

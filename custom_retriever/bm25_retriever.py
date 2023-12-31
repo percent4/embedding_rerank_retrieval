@@ -51,6 +51,8 @@ class CustomBM25Retriever(BaseRetriever):
 
 
 if __name__ == '__main__':
+    from pprint import pprint
     custom_bm25_retriever = CustomBM25Retriever(top_k=3)
-    t_result = custom_bm25_retriever.retrieve(str_or_query_bundle="请根据灯塔专业版数据，列出2019年至2022年暑期档电影市场的总票房，并分析其变化趋势。")
-    print(t_result)
+    query = "半导体制造设备市场日本占多少份额？"
+    t_result = custom_bm25_retriever.retrieve(str_or_query_bundle=query)
+    pprint(t_result)

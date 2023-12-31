@@ -18,7 +18,7 @@ class EmbeddingCache(object):
 
     @staticmethod
     @retry(exceptions=Exception, tries=3, max_delay=20)
-    def __get_openai_embedding(req_text: str):
+    def get_openai_embedding(req_text: str):
         time.sleep(random.random() / 2)
         url = "https://api.openai.com/v1/embeddings"
         headers = {'Content-Type': 'application/json', "Authorization": f"Bearer {os.getenv('OPENAI_API_KEY')}"}
@@ -33,7 +33,7 @@ class EmbeddingCache(object):
         query_num = len(queries)
         embedding_data = np.empty(shape=[query_num, 1536])
         for i in tqdm(range(query_num), desc="generate embedding"):
-            embedding_data[i] = self.__get_openai_embedding(queries[i])
+            embedding_data[i] = self.get_openai_embedding(queries[i])
         np.save(f"../data/{context_type}_openai_embedding.npy", embedding_data)
 
     def build(self):
