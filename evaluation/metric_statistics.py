@@ -4,14 +4,15 @@ import pandas as pd
 import plotly as py
 import plotly.graph_objs as go
 
-metric = "hit_rate"
+metric = "mrr"
 
 x_list = [f"top_{k}_retrieve" for k in range(1, 6)]
 
-model_hit_rate_dict = {"ensemble": [],
-                       "rerank-bge-base": [],
-                       "rerank-bge-large": [],
-                       "rerank-cohere": []}
+model_hit_rate_dict = {"bge-base-embedding": [],
+                       "bge-large-embedding": [],
+                       "openai-embedding": [],
+                       "bge-base-sft-embedding": [],
+                       "bge-large-sft-embedding": []}
 
 max_metric_value = 0
 

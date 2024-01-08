@@ -128,6 +128,9 @@ bge-large-embedding-finetune:
 | embedding_top_4_eval | 0.9376947040498442 | 0.8364485981308412 | 49.448251724243164 |
 | embedding_top_5_eval | 0.9376947040498442 | 0.8364485981308412 | 57.805776596069336 |
 
+![不同Embedding模型之间的Hit Rate比较](https://s2.loli.net/2024/01/08/JDsAt4vn3Smy6hI.png)
+
+![不同Embedding模型之间的MRR比较](https://s2.loli.net/2024/01/08/oR741v93dkILyqM.png)
 
 ## 可视化分析
 
