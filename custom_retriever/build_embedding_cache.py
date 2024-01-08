@@ -29,7 +29,7 @@ class EmbeddingCache(object):
     @staticmethod
     @retry(exceptions=Exception, tries=3, max_delay=20)
     def get_bge_embedding(req_text: str):
-        url = "http://35.89.147.116:50072/embedding"
+        url = "http://localhost:50072/embedding"
         headers = {'Content-Type': 'application/json'}
         payload = json.dumps({"text": req_text})
         new_req = requests.request("POST", url, headers=headers, data=payload)
