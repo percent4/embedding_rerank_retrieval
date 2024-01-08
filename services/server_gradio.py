@@ -14,8 +14,9 @@ from custom_retriever.vector_store_retriever import VectorSearchRetriever
 from custom_retriever.ensemble_retriever import EnsembleRetriever
 from custom_retriever.ensemble_rerank_retriever import EnsembleRerankRetriever
 from preprocess.get_text_id_mapping import queries, query_relevant_docs
+from preprocess.query_rewrite import generate_queries, llm
 
-retrieve_methods = ["bm25", "embedding", "ensemble", "ensemble + bge-rerank-large"]
+retrieve_methods = ["bm25", "embedding", "ensemble", "ensemble + bge-rerank-large", "query_rewrite + ensemble"]
 
 
 def get_metric(search_query, search_result):
@@ -63,6 +64,18 @@ def get_retrieve_result(retriever_list, retrieve_top_k, retrieve_query):
         columns["ensemble + bge-rerank-large"].extend(get_metric(retrieve_query, search_result))
         for i in range(retrieve_top_k):
             columns["ensemble + bge-rerank-large"].append(search_result[i].text)
+        faiss_index.reset()
+    if "query_rewrite + ensemble" in retriever_list:
+        queries = generate_queries(llm, retrieve_query, num_queries=1)
+        print(f"original query: {retrieve_query}\n"
+              f"rewrite query: {queries}")
+        faiss_index = IndexFlatIP(1536)
+        ensemble_retriever = EnsembleRetriever(top_k=retrieve_top_k, faiss_index=faiss_index, weights=[0.5, 0.5])
+        search_result = ensemble_retriever.retrieve(str_or_query_bundle=queries[0])
+        columns["query_rewrite + ensemble"] = []
+        columns["query_rewrite + ensemble"].extend(get_metric(retrieve_query, search_result))
+        for i in range(retrieve_top_k):
+            columns["query_rewrite + ensemble"].append(search_result[i].text)
         faiss_index.reset()
     retrieve_df = pd.DataFrame(columns)
     return retrieve_df

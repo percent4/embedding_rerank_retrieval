@@ -63,7 +63,11 @@ if __name__ == '__main__':
     from faiss import IndexFlatIP
 
     faiss_index = IndexFlatIP(1536)
-    ensemble_retriever = EnsembleRetriever(top_k=2, faiss_index=faiss_index, weights=[0.5, 0.5])
-    t_result = ensemble_retriever.retrieve(str_or_query_bundle="索尼1953年引入的技术专利是什么？")
+    query = "日本半导体发展史的三个时期是什么？日本半导体发展史可以分为以下三个时期：1. 初期发展（1950年代至1970年代）：在这一时期，日本半导体行业主要依赖于进口技术和设备。日本政府积极推动半导体产业的发展，设立了研究机构和实验室，并提供财政支持。日本企业开始生产晶体管和集成电路，逐渐取得了技术突破和市场份额的增长。2. 高速增长（1980年代至1990年代）：在这一时期，日本半导体行业迅速崛起，成为全球"
+    query = "美日半导体协议是由哪两部门签署的？美日半导体协议是由美国商务部和日本经济产业省签署的。"
+    query = "日美半导体协议要求美国芯片在日本市场份额是多少？根据日美半导体协议，要求美国芯片在日本市场的份额为20%。"
+    query = "尼康和佳能的光刻机在哪个市场占优势？尼康和佳能都是知名的相机制造商，但在光刻机市场上，尼康占据着主导地位。尼康是全球最大的光刻机制造商之一，其光刻机产品广泛应用于半导体行业，尤其在高端光刻机市场上"
+    ensemble_retriever = EnsembleRetriever(top_k=3, faiss_index=faiss_index, weights=[0.5, 0.5])
+    t_result = ensemble_retriever.retrieve(str_or_query_bundle=query)
     print(t_result)
     faiss_index.reset()

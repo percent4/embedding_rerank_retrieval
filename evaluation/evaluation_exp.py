@@ -64,26 +64,26 @@ metrics = ["mrr", "hit_rate"]
 # df.to_csv(f"evaluation_bm25_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # embedding retrieve
-# evaluation_name_list = []
-# evaluation_result_list = []
-# cost_time_list = []
-#
-# for top_k in [1, 2, 3, 4, 5]:
-#     start_time = time.time()
-#     faiss_index = IndexFlatIP(1536)
-#     embedding_retriever = VectorSearchRetriever(top_k=top_k, faiss_index=faiss_index)
-#     embedding_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics, retriever=embedding_retriever)
-#     embedding_eval_results = asyncio.run(embedding_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
-#     evaluation_name_list.append(f"embedding_top_{top_k}_eval")
-#     evaluation_result_list.append(embedding_eval_results)
-#     faiss_index.reset()
-#     cost_time_list.append((time.time() - start_time) * 1000)
-#
-# print("done for embedding evaluation!")
-# df = display_results(evaluation_name_list, evaluation_result_list)
-# df['cost_time'] = cost_time_list
-# print(df.head())
-# df.to_csv(f"evaluation_embedding_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+evaluation_name_list = []
+evaluation_result_list = []
+cost_time_list = []
+
+for top_k in [1, 2, 3, 4, 5]:
+    start_time = time.time()
+    faiss_index = IndexFlatIP(768)
+    embedding_retriever = VectorSearchRetriever(top_k=top_k, faiss_index=faiss_index)
+    embedding_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics, retriever=embedding_retriever)
+    embedding_eval_results = asyncio.run(embedding_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
+    evaluation_name_list.append(f"embedding_top_{top_k}_eval")
+    evaluation_result_list.append(embedding_eval_results)
+    faiss_index.reset()
+    cost_time_list.append((time.time() - start_time) * 1000)
+
+print("done for embedding evaluation!")
+df = display_results(evaluation_name_list, evaluation_result_list)
+df['cost_time'] = cost_time_list
+print(df.head())
+df.to_csv(f"evaluation_bge_base_sft_embedding_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # ensemble retrieve
 # evaluation_name_list = []
@@ -132,25 +132,25 @@ metrics = ["mrr", "hit_rate"]
 #     df.to_csv(f"evaluation_ensemble-rerank-bge-base_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # query rewrite ensemble retrieve
-evaluation_name_list = []
-evaluation_result_list = []
-cost_time_list = []
-
-for top_k in [1, 2, 3, 4, 5]:
-    start_time = time.time()
-    faiss_index = IndexFlatIP(1536)
-    query_rewrite_ensemble_retriever = QueryRewriteEnsembleRetriever(top_k=top_k, faiss_index=faiss_index)
-    query_rewrite_ensemble_retriever_evaluator = RetrieverEvaluator.\
-        from_metric_names(metrics, retriever=query_rewrite_ensemble_retriever)
-    query_rewrite_ensemble_eval_results = asyncio.run(query_rewrite_ensemble_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
-    evaluation_name_list.append(f"query-rewrite-ensemble_top_{top_k}_eval")
-    evaluation_result_list.append(query_rewrite_ensemble_eval_results)
-    faiss_index.reset()
-    cost_time_list.append((time.time() - start_time) * 1000)
-
-print("done for query_rewrite ensemble evaluation!")
-df = display_results(evaluation_name_list, evaluation_result_list)
-df['cost_time'] = cost_time_list
-print(df.head())
-df.to_csv(f"evaluation_query-rewrite-ensemble_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+# evaluation_name_list = []
+# evaluation_result_list = []
+# cost_time_list = []
+#
+# for top_k in [1, 2, 3, 4, 5]:
+#     start_time = time.time()
+#     faiss_index = IndexFlatIP(1536)
+#     query_rewrite_ensemble_retriever = QueryRewriteEnsembleRetriever(top_k=top_k, faiss_index=faiss_index)
+#     query_rewrite_ensemble_retriever_evaluator = RetrieverEvaluator.\
+#         from_metric_names(metrics, retriever=query_rewrite_ensemble_retriever)
+#     query_rewrite_ensemble_eval_results = asyncio.run(query_rewrite_ensemble_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
+#     evaluation_name_list.append(f"query-rewrite-ensemble_top_{top_k}_eval")
+#     evaluation_result_list.append(query_rewrite_ensemble_eval_results)
+#     faiss_index.reset()
+#     cost_time_list.append((time.time() - start_time) * 1000)
+#
+# print("done for query_rewrite ensemble evaluation!")
+# df = display_results(evaluation_name_list, evaluation_result_list)
+# df['cost_time'] = cost_time_list
+# print(df.head())
+# df.to_csv(f"evaluation_query-rewrite-ensemble_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
