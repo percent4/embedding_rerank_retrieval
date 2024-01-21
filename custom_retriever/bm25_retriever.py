@@ -19,7 +19,7 @@ class CustomBM25Retriever(BaseRetriever):
     def __init__(self, top_k) -> None:
         """Init params."""
         super().__init__()
-        self.es_client = Elasticsearch([{'host': 'localhost', 'port': 9200}])
+        self.es_client = Elasticsearch("http://localhost:9200")
         self.top_k = top_k
 
     def _retrieve(self, query: QueryType) -> List[NodeWithScore]:
@@ -53,6 +53,6 @@ class CustomBM25Retriever(BaseRetriever):
 if __name__ == '__main__':
     from pprint import pprint
     custom_bm25_retriever = CustomBM25Retriever(top_k=3)
-    query = "半导体制造设备市场日本占多少份额？"
+    query = "美日半导体协议是由哪两部门签署的？美日半导体协议是由美国商务部和日本经济产业省签署的。"
     t_result = custom_bm25_retriever.retrieve(str_or_query_bundle=query)
     pprint(t_result)

@@ -52,7 +52,7 @@ if __name__ == '__main__':
     from faiss import IndexFlatIP
     faiss_index = IndexFlatIP(1536)
     vector_search_retriever = VectorSearchRetriever(top_k=3, faiss_index=faiss_index)
-    query = "半导体制造设备市场美国占多少份额？"
+    query = "美日半导体协议是由哪两部门签署的？美日半导体协议是由美国商务部和日本经济产业省签署的。"
     t_result = vector_search_retriever.retrieve(str_or_query_bundle=query)
     pprint(t_result)
     faiss_index.reset()

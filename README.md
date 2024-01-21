@@ -13,6 +13,7 @@ Retrieve Method：
 
 1. [NLP（八十二）RAG框架中的Retrieve算法评估](https://mp.weixin.qq.com/s?__biz=MzU2NTYyMDk5MQ==&mid=2247486199&idx=1&sn=f24175b05bdf5bc6dd42efed4d5acae8&chksm=fcb9b367cbce3a711fabd1a56bb5b9d803aba2f42964b4e1f9a4dc6e2174f0952ddb9e1d4c55&token=1977141018&lang=zh_CN#rd)
 2. [NLP（八十三）RAG框架中的Rerank算法评估](https://mp.weixin.qq.com/s?__biz=MzU2NTYyMDk5MQ==&mid=2247486225&idx=1&sn=235eb787e2034f24554d8e997dbb4718&chksm=fcb9b281cbce3b9761342ebadbe001747ce2e74d84340f78b0e12c4d4c6aed7a7817f246c845&token=1977141018&lang=zh_CN#rd)
+3. [NLP（八十四）RAG框架中的召回算法可视化分析及提升方法](https://mp.weixin.qq.com/s?__biz=MzU2NTYyMDk5MQ==&mid=2247486264&idx=1&sn=afa31ecc8b23724154a08090ccfab213&chksm=fcb9b2a8cbce3bbeb6daaee6308c10f097c32d304f076c3061718e669fd366c8aec9e6cf379d&token=823710334&lang=zh_CN#rd)
 
 ## 数据
 
@@ -136,7 +137,61 @@ bge-large-embedding-finetune:
 
 ![retrieval_website.png](https://s2.loli.net/2023/12/30/mZkJ37KRHTFSsyO.png)
 
+| 检索类型 | 优点 | 缺点 |
+|----------|------|------|
+| 向量检索 (Embedding) | 1. 语义理解更强。<br>2. 能有效处理模糊或间接的查询。<br>3. 对自然语言的多样性适应性强。<br>4. 能识别不同词汇的相同意义。 | 1. 计算和存储成本高。<br>2. 索引时间较长。<br>3. 高度依赖训练数据的质量和数量。<br>4. 结果解释性较差。 |
+| 关键词检索 (BM25) | 1. 检索速度快。<br>2. 实现简单，资源需求低。<br>3. 结果易于理解，可解释性强。<br>4. 对精确查询表现良好。 | 1. 对复杂语义理解有限。<br>2. 对查询变化敏感，灵活性差。<br>3. 难以处理同义词和多义词。<br>4. 需要用户准确使用关键词。 |
+
+- `query`: "NEDO"的全称是什么？
+
+![Embedding召回优于BM25](https://s2.loli.net/2024/01/20/Uh1FGYJT26ONd3t.png)
+
+在这个例子中，Embedding召回结果优于BM25，BM25召回结果虽然在top_3结果中存在，但排名第三，排在首位的是不相关的文本，而Embedding由于文本相似度的优势，将正确结果放在了首位。
+
+- `query`: 日本半导体产品的主要应用领域是什么？
+
+![BM25召回优于Embedding](https://s2.loli.net/2024/01/20/BSO19sKko8gclem.png)
+
+在这个例子中，BM25召回结果优于Embedding。
+
+- `query`: 《美日半导体协议》对日本半导体市场有何影响？
+
+![ensemble算法提升了排名](https://s2.loli.net/2024/01/20/wHU4LP7iRXfQ5CW.png)
+
+在这个例子中，正确文本在BM25算法召回结果中排名第二，在Embedding算法中排第三，混合搜索排名第一，这里体现了混合搜索的优越性。
+
+- `query`: 80年代日本电子产业的辉煌表现在哪些方面？
+
+![Rerank的优越性](https://s2.loli.net/2024/01/20/6S1wBXv7caZDCkd.png)
+
+在这个例子中，不管是BM25, Embedding,还是Ensemble，都没能将正确文本排在第一位，而经过Rerank以后，正确文本排在第一位，这里体现了Rerank算法的优势。
+
 ## 改进方案
 
-1. Query Transform
+1. Query Rewrite
+
+- 原始query: 半导体制造设备市场美、日、荷各占多少份额？
+- 改写后query：美国、日本和荷兰在半导体制造设备市场的份额分别是多少？
+
+改写后的query在BM25和Embedding的top 3召回结果中都能找到。该query对应的正确文本为：
+
+> 全球半导体设备制造领域，美国、日本和荷兰控制着全球370亿美元半导体制造设备市场的90％以上。其中，美国的半导体制造设备（SME）产业占全球产量的近50%，日本约占30%，荷兰约占17％%。更具体地，以光刻机为例，EUV光刻工序其实有众多日本厂商的参与，如东京电子生产的EUV涂覆显影设备，占据100%的市场份额，Lasertec Corp.也是全球唯一的测试机制造商。另外还有EUV光刻胶，据南大光电在3月发布的相关报告中披露，全球仅有日本厂商研发出了EUV光刻胶。
+
+从中我们可以看到，在改写后的query中，美国、日本、荷兰这三个词发挥了重要作用，因此，**query改写对于含有缩写的query有一定的召回效果改善**。
+
 2. HyDE
+
+HyDE（全称Hypothetical Document Embeddings）是RAG中的一种技术，它基于一个假设：相较于直接查询，通过大语言模型 (LLM) 生成的答案在嵌入空间中可能更为接近。HyDE 首先响应查询生成一个假设性文档（答案），然后将其嵌入，从而提高搜索的效果。
+
+比如：
+
+- 原始query: 美日半导体协议是由哪两部门签署的？
+- 加上回答后的query: 美日半导体协议是由哪两部门签署的？美日半导体协议是由美国商务部和日本经济产业省签署的。
+
+加上回答后的query使用BM25算法可以找回正确文本，且排名第一位，而Embedding算法仍无法召回。
+
+正确文本为：
+
+> 1985年6月，美国半导体产业贸易保护的调子开始升高。美国半导体工业协会向国会递交一份正式的“301条款”文本，要求美国政府制止日本公司的倾销行为。民意调查显示，68%的美国人认为日本是美国最大的威胁。在舆论的引导和半导体工业协会的推动下，美国政府将信息产业定为可以动用国家安全借口进行保护的新兴战略产业，半导体产业成为美日贸易战的焦点。1985年10月，美国商务部出面指控日本公司倾销256K和1M内存。一年后，日本通产省被迫与美国商务部签署第一次《美日半导体协议》。
+
+从中可以看出，大模型的回答是正确的，美国商务部这个关键词发挥了重要作用，因此，HyDE对于特定的query有召回效果提升。
