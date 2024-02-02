@@ -70,7 +70,7 @@ cost_time_list = []
 
 for top_k in [1, 2, 3, 4, 5]:
     start_time = time.time()
-    faiss_index = IndexFlatIP(768)
+    faiss_index = IndexFlatIP(1024)
     embedding_retriever = VectorSearchRetriever(top_k=top_k, faiss_index=faiss_index)
     embedding_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics, retriever=embedding_retriever)
     embedding_eval_results = asyncio.run(embedding_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
@@ -83,7 +83,7 @@ print("done for embedding evaluation!")
 df = display_results(evaluation_name_list, evaluation_result_list)
 df['cost_time'] = cost_time_list
 print(df.head())
-df.to_csv(f"evaluation_bge_base_sft_embedding_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+df.to_csv(f"evaluation_bge_m3_embedding_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # ensemble retrieve
 # evaluation_name_list = []

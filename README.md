@@ -89,6 +89,16 @@ bge-rerank-large:
 
 ## 不同Embedding模型之间的比较
 
+jina-base-zh-embedding:
+
+| retrievers           | hit_rate           | mrr                | cost_time          |
+|----------------------|--------------------|--------------------|--------------------|
+| embedding_top_1_eval | 0.5389408099688473 | 0.5389408099688473 | 34.9421501159668   |
+| embedding_top_2_eval | 0.6448598130841121 | 0.5919003115264797 | 35.04490852355957  |
+| embedding_top_3_eval | 0.7165109034267912 | 0.6157840083073729 | 40.548086166381836 |
+| embedding_top_4_eval | 0.7476635514018691 | 0.6235721703011423 | 41.40806198120117  |
+| embedding_top_5_eval | 0.7694704049844237 | 0.6279335410176532 | 43.450117111206055 |
+
 bge-base-embedding:
 
 | retrievers           | hit_rate           | mrr                | cost_time          |
@@ -108,6 +118,16 @@ bge-large-embedding:
 | embedding_top_3_eval | 0.7725856697819314 | 0.6723779854620976 | 51.7120361328125   |
 | embedding_top_4_eval | 0.794392523364486  | 0.6778296988577361 | 51.872968673706055 |
 | embedding_top_5_eval | 0.822429906542056  | 0.6834371754932502 | 56.67304992675781  |
+
+bge-m3-embedding:
+
+| retrievers           | hit_rate           | mrr                | cost_time          |
+|----------------------|--------------------|--------------------|--------------------|
+| embedding_top_1_eval | 0.6822429906542056 | 0.6822429906542056 | 43.41626167297363  |
+| embedding_top_2_eval | 0.778816199376947  | 0.7305295950155763 | 44.278860092163086 |
+| embedding_top_3_eval | 0.8193146417445483 | 0.7440290758047767 | 45.64094543457031  |
+| embedding_top_4_eval | 0.8504672897196262 | 0.7518172377985461 | 46.158790588378906 |
+| embedding_top_5_eval | 0.8722741433021807 | 0.7561786085150571 | 50.23527145385742  |
 
 bge-base-embedding-finetune:
 
@@ -129,9 +149,9 @@ bge-large-embedding-finetune:
 | embedding_top_4_eval | 0.9376947040498442 | 0.8364485981308412 | 49.448251724243164 |
 | embedding_top_5_eval | 0.9376947040498442 | 0.8364485981308412 | 57.805776596069336 |
 
-![不同Embedding模型之间的Hit Rate比较](https://s2.loli.net/2024/01/08/JDsAt4vn3Smy6hI.png)
+![不同Embedding模型之间的Hit Rate比较](https://s2.loli.net/2024/02/02/3KE4ZmFWdnVLRpt.png)
 
-![不同Embedding模型之间的MRR比较](https://s2.loli.net/2024/01/08/oR741v93dkILyqM.png)
+![不同Embedding模型之间的MRR比较](https://s2.loli.net/2024/02/02/yuIL8noWNfJd5wH.png)
 
 ## 可视化分析
 

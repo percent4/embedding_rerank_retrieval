@@ -8,11 +8,14 @@ metric = "mrr"
 
 x_list = [f"top_{k}_retrieve" for k in range(1, 6)]
 
-model_hit_rate_dict = {"bge-base-embedding": [],
-                       "bge-large-embedding": [],
+model_hit_rate_dict = {"jina-base-zh": [],
                        "openai-embedding": [],
+                       "bge-base-embedding": [],
+                       "bge-large-embedding": [],
+                       "bge-m3": [],
                        "bge-base-sft-embedding": [],
-                       "bge-large-sft-embedding": []}
+                       "bge-large-sft-embedding": []
+                       }
 
 max_metric_value = 0
 

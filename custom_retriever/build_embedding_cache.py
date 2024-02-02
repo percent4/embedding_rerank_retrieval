@@ -4,6 +4,7 @@
 # @time: 2023/12/26 12:57
 import os
 import time
+import math
 import json
 import random
 import requests
@@ -35,15 +36,33 @@ class EmbeddingCache(object):
         new_req = requests.request("POST", url, headers=headers, data=payload)
         return new_req.json()['embedding']
 
+    @staticmethod
+    @retry(exceptions=Exception, tries=3, max_delay=20)
+    def get_jina_embedding(req_text: str):
+        time.sleep(random.random() / 2)
+        url = 'https://api.jina.ai/v1/embeddings'
+        headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {os.getenv("JINA_API_KEY")}'
+        }
+        data = {
+            'input': [req_text],
+            'model': 'jina-embeddings-v2-base-zh'
+        }
+        response = requests.post(url, headers=headers, json=data)
+        embedding = response.json()["data"][0]["embedding"]
+        embedding_norm = math.sqrt(sum([i**2 for i in embedding]))
+        return [i/embedding_norm for i in embedding]
+
     def build_with_context(self, context_type: str):
         with open("../data/doc_qa_test.json", "r", encoding="utf-8") as f:
             content = json.loads(f.read())
         queries = list(content[context_type].values())
         query_num = len(queries)
-        embedding_data = np.empty(shape=[query_num, 768])
+        embedding_data = np.empty(shape=[query_num, 1024])
         for i in tqdm(range(query_num), desc="generate embedding"):
             embedding_data[i] = self.get_bge_embedding(queries[i])
-        np.save(f"../data/{context_type}_bge_base_ft_embedding.npy", embedding_data)
+        np.save(f"../data/{context_type}_bge_m3_embedding.npy", embedding_data)
 
     def build(self):
         self.build_with_context("queries")
@@ -52,8 +71,8 @@ class EmbeddingCache(object):
     @staticmethod
     def load(query_write=False):
         current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        queries_embedding_data = np.load(os.path.join(current_dir, "data/queries_openai_embedding.npy"))
-        corpus_embedding_data = np.load(os.path.join(current_dir, "data/corpus_openai_embedding.npy"))
+        queries_embedding_data = np.load(os.path.join(current_dir, "data/queries_bge_m3_embedding.npy"))
+        corpus_embedding_data = np.load(os.path.join(current_dir, "data/corpus_bge_m3_embedding.npy"))
         query_embedding_dict = {}
         with open(os.path.join(current_dir, "data/doc_qa_test.json"), "r", encoding="utf-8") as f:
             content = json.loads(f.read())
