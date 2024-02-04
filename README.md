@@ -14,6 +14,7 @@ Retrieve Method：
 1. [NLP（八十二）RAG框架中的Retrieve算法评估](https://mp.weixin.qq.com/s?__biz=MzU2NTYyMDk5MQ==&mid=2247486199&idx=1&sn=f24175b05bdf5bc6dd42efed4d5acae8&chksm=fcb9b367cbce3a711fabd1a56bb5b9d803aba2f42964b4e1f9a4dc6e2174f0952ddb9e1d4c55&token=1977141018&lang=zh_CN#rd)
 2. [NLP（八十三）RAG框架中的Rerank算法评估](https://mp.weixin.qq.com/s?__biz=MzU2NTYyMDk5MQ==&mid=2247486225&idx=1&sn=235eb787e2034f24554d8e997dbb4718&chksm=fcb9b281cbce3b9761342ebadbe001747ce2e74d84340f78b0e12c4d4c6aed7a7817f246c845&token=1977141018&lang=zh_CN#rd)
 3. [NLP（八十四）RAG框架中的召回算法可视化分析及提升方法](https://mp.weixin.qq.com/s?__biz=MzU2NTYyMDk5MQ==&mid=2247486264&idx=1&sn=afa31ecc8b23724154a08090ccfab213&chksm=fcb9b2a8cbce3bbeb6daaee6308c10f097c32d304f076c3061718e669fd366c8aec9e6cf379d&token=823710334&lang=zh_CN#rd)
+4. [NLP（八十六）RAG框架Retrieve阶段的Embedding模型微调](https://mp.weixin.qq.com/s?__biz=MzU2NTYyMDk5MQ==&mid=2247486333&idx=1&sn=29d00d472647bc5d6e336bec22c88139&chksm=fcb9b2edcbce3bfb42ea149d96fb1296b10a79a60db7ad2da01b85ab223394191205426bc025&token=1376257911&lang=zh_CN#rd)
 
 ## 数据
 
@@ -129,6 +130,16 @@ bge-m3-embedding:
 | embedding_top_4_eval | 0.8504672897196262 | 0.7518172377985461 | 46.158790588378906 |
 | embedding_top_5_eval | 0.8722741433021807 | 0.7561786085150571 | 50.23527145385742  |
 
+bce-embedding:
+
+| retrievers           | hit_rate           | mrr                | cost_time          |
+|----------------------|--------------------|--------------------|--------------------|
+| embedding_top_1_eval | 0.5794392523364486 | 0.5794392523364486 | 42.510032653808594 |
+| embedding_top_2_eval | 0.6853582554517134 | 0.632398753894081  | 42.72007942199707  |
+| embedding_top_3_eval | 0.7227414330218068 | 0.6448598130841121 | 41.066884994506836 |
+| embedding_top_4_eval | 0.7507788161993769 | 0.6518691588785047 | 43.18714141845703  |
+| embedding_top_5_eval | 0.7663551401869159 | 0.6549844236760125 | 44.08693313598633  |
+
 bge-base-embedding-finetune:
 
 | retrievers           | hit_rate           | mrr                | cost_time          |
@@ -149,9 +160,9 @@ bge-large-embedding-finetune:
 | embedding_top_4_eval | 0.9376947040498442 | 0.8364485981308412 | 49.448251724243164 |
 | embedding_top_5_eval | 0.9376947040498442 | 0.8364485981308412 | 57.805776596069336 |
 
-![不同Embedding模型之间的Hit Rate比较](https://s2.loli.net/2024/02/02/3KE4ZmFWdnVLRpt.png)
+![不同Embedding模型之间的Hit Rate比较](https://s2.loli.net/2024/02/04/9ZHclTtyBN6CM8n.png)
 
-![不同Embedding模型之间的MRR比较](https://s2.loli.net/2024/02/02/yuIL8noWNfJd5wH.png)
+![不同Embedding模型之间的MRR比较](https://s2.loli.net/2024/02/04/6UGQpCdlLoDAKiP.png)
 
 ## 可视化分析
 

@@ -30,7 +30,7 @@ class EmbeddingCache(object):
     @staticmethod
     @retry(exceptions=Exception, tries=3, max_delay=20)
     def get_bge_embedding(req_text: str):
-        url = "http://localhost:50072/embedding"
+        url = "http://localhost:50073/embedding"
         headers = {'Content-Type': 'application/json'}
         payload = json.dumps({"text": req_text})
         new_req = requests.request("POST", url, headers=headers, data=payload)
@@ -59,10 +59,10 @@ class EmbeddingCache(object):
             content = json.loads(f.read())
         queries = list(content[context_type].values())
         query_num = len(queries)
-        embedding_data = np.empty(shape=[query_num, 1024])
+        embedding_data = np.empty(shape=[query_num, 768])
         for i in tqdm(range(query_num), desc="generate embedding"):
             embedding_data[i] = self.get_bge_embedding(queries[i])
-        np.save(f"../data/{context_type}_bge_m3_embedding.npy", embedding_data)
+        np.save(f"../data/{context_type}_bce_embedding.npy", embedding_data)
 
     def build(self):
         self.build_with_context("queries")
@@ -71,8 +71,8 @@ class EmbeddingCache(object):
     @staticmethod
     def load(query_write=False):
         current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        queries_embedding_data = np.load(os.path.join(current_dir, "data/queries_bge_m3_embedding.npy"))
-        corpus_embedding_data = np.load(os.path.join(current_dir, "data/corpus_bge_m3_embedding.npy"))
+        queries_embedding_data = np.load(os.path.join(current_dir, "data/queries_bce_embedding.npy"))
+        corpus_embedding_data = np.load(os.path.join(current_dir, "data/corpus_bce_embedding.npy"))
         query_embedding_dict = {}
         with open(os.path.join(current_dir, "data/doc_qa_test.json"), "r", encoding="utf-8") as f:
             content = json.loads(f.read())
