@@ -26,7 +26,7 @@ from retry import retry
 
 @retry(exceptions=Exception, tries=5, max_delay=60)
 def bge_rerank_result(query: str, docs: List[str], top_n) -> List[Tuple]:
-    url = "http://localhost:50072/bge_large_rerank"
+    url = "http://localhost:9000/bge_rerank"
     payload = json.dumps({
         "query": query,
         "passages": docs,

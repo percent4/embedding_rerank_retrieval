@@ -86,7 +86,29 @@ bge-rerank-large:
 | ensemble_bge_large_rerank_top_4_eval | 0.9502   | 0.8564 |
 | ensemble_bge_large_rerank_top_5_eval | 0.9626   | 0.8537 |
 
-![不同Rerank模型的Hit Rate](https://s2.loli.net/2023/12/29/vsuXBtbLdaVDS39.png)
+ft-bge-rerank-base:
+
+| retrievers                             | hit_rate | mrr      | 
+|----------------------------------------|----------|----------|
+| ensemble_ft_bge_base_rerank_top_1_eval | 0.8474   | 0.8474   |
+| ensemble_ft_bge_base_rerank_top_2_eval | 0.9003   | 0.8816   |
+| ensemble_ft_bge_base_rerank_top_3_eval | 0.9408   | 0.9102   | 
+| ensemble_ft_bge_base_rerank_top_4_eval | 0.9533   | 0.9180   | 
+| ensemble_ft_bge_base_rerank_top_5_eval | 0.9657   | 0.9240   | 
+
+
+ft-bge-rerank-large:
+
+| retrievers                              | hit_rate | mrr     |
+|-----------------------------------------|----------|---------|
+| ensemble_ft_bge_large_rerank_top_1_eval | 0.8474   | 0.8474  |
+| ensemble_ft_bge_large_rerank_top_2_eval | 0.9003   | 0.8769  |
+| ensemble_ft_bge_large_rerank_top_3_eval | 0.9439   | 0.9024  |
+| ensemble_ft_bge_large_rerank_top_4_eval | 0.9564   | 0.9029  |
+| ensemble_ft_bge_large_rerank_top_5_eval | 0.9688   | 0.9028  |
+
+
+![不同Rerank模型的Hit Rate](https://s2.loli.net/2024/06/19/MrNFwl4IeKJGPxa.png)
 
 ## 不同Embedding模型之间的比较
 

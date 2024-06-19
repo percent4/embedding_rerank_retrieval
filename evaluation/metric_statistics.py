@@ -4,18 +4,16 @@ import pandas as pd
 import plotly as py
 import plotly.graph_objs as go
 
-metric = "mrr"
+metric = "hit_rate"
 
 x_list = [f"top_{k}_retrieve" for k in range(1, 6)]
 
-model_hit_rate_dict = {"jina-base-zh-embedding": [],
-                       "openai-embedding": [],
-                       "bge-base-embedding": [],
-                       "bge-large-embedding": [],
-                       "bge-m3-embedding": [],
-                       "bce-embedding": [],
-                       "bge-base-sft-embedding": [],
-                       "bge-large-sft-embedding": []
+model_hit_rate_dict = {"ensemble": [],
+                       "rerank-bge-base": [],
+                       "ft-rerank-bge-base": [],
+                       "rerank-bge-large": [],
+                       "ft-rerank-bge-large": [],
+                       "rerank-cohere": []
                        }
 
 max_metric_value = 0
@@ -50,7 +48,8 @@ figure.update_layout(
         font=dict(
             size=28  # 设置图例文字大小
         )
-    )
+    ),
+    yaxis_range=[0.65, 1]
 )
 # Plot
 py.offline.plot(figure, filename=f'{metric}.html')
