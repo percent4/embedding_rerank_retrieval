@@ -41,7 +41,7 @@ class QuerySuite(BaseModel):
     top_k: int = 1
 
 
-@ app.post('/bge_base_rerank')
+@app.post('/bge_base_rerank')
 def rerank(query_suite: QuerySuite):
     scores = reranker.compute_score([[query_suite.query, passage] for passage in query_suite.passages])
     if isinstance(scores, list):
