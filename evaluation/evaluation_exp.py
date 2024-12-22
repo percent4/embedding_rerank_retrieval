@@ -4,6 +4,8 @@
 # @time: 2023/12/25 20:01
 import asyncio
 import time
+import sys
+sys.path.append("../")
 
 import pandas as pd
 from datetime import datetime
@@ -64,26 +66,26 @@ metrics = ["mrr", "hit_rate"]
 # df.to_csv(f"evaluation_bm25_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # embedding retrieve
-# evaluation_name_list = []
-# evaluation_result_list = []
-# cost_time_list = []
-#
-# for top_k in [1, 2, 3, 4, 5]:
-#     start_time = time.time()
-#     faiss_index = IndexFlatIP(768)
-#     embedding_retriever = VectorSearchRetriever(top_k=top_k, faiss_index=faiss_index)
-#     embedding_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics, retriever=embedding_retriever)
-#     embedding_eval_results = asyncio.run(embedding_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
-#     evaluation_name_list.append(f"embedding_top_{top_k}_eval")
-#     evaluation_result_list.append(embedding_eval_results)
-#     faiss_index.reset()
-#     cost_time_list.append((time.time() - start_time) * 1000)
-#
-# print("done for embedding evaluation!")
-# df = display_results(evaluation_name_list, evaluation_result_list)
-# df['cost_time'] = cost_time_list
-# print(df.head())
-# df.to_csv(f"evaluation_bce_embedding_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+evaluation_name_list = []
+evaluation_result_list = []
+cost_time_list = []
+
+for top_k in [1, 2, 3, 4, 5]:
+    start_time = time.time()
+    faiss_index = IndexFlatIP(768)
+    embedding_retriever = VectorSearchRetriever(top_k=top_k, faiss_index=faiss_index)
+    embedding_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics, retriever=embedding_retriever)
+    embedding_eval_results = asyncio.run(embedding_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
+    evaluation_name_list.append(f"late_chunking_embedding_top_{top_k}_eval")
+    evaluation_result_list.append(embedding_eval_results)
+    faiss_index.reset()
+    cost_time_list.append((time.time() - start_time) * 1000)
+
+print("done for embedding evaluation!")
+df = display_results(evaluation_name_list, evaluation_result_list)
+df['cost_time'] = cost_time_list
+print(df.head())
+df.to_csv(f"evaluation_jina_late_chunking_embedding_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # ensemble retrieve
 # evaluation_name_list = []
@@ -108,28 +110,28 @@ metrics = ["mrr", "hit_rate"]
 # df.to_csv(f"evaluation_ensemble_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # ensemble rerank retrieve
-evaluation_name_list = []
-evaluation_result_list = []
-cost_time_list = []
-
-for top_k in [1, 2, 3, 4, 5]:
-    start_time = time.time()
-    faiss_index = IndexFlatIP(1536)
-    ensemble_rerank_retriever = EnsembleRerankRetriever(top_k=top_k, faiss_index=faiss_index)
-    ensemble_rerank_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics,
-                                                                               retriever=ensemble_rerank_retriever)
-    ensemble_rerank_eval_results = asyncio.run(ensemble_rerank_retriever_evaluator.aevaluate_dataset(doc_qa_dataset,
-                                                                                                     show_progress=True))
-    evaluation_name_list.append(f"ensemble_rerank_top_{top_k}_eval")
-    evaluation_result_list.append(ensemble_rerank_eval_results)
-    faiss_index.reset()
-    cost_time_list.append((time.time() - start_time) * 1000)
-
-    print("done for ensemble_rerank evaluation!")
-    df = display_results(evaluation_name_list, evaluation_result_list)
-    df['cost_time'] = cost_time_list
-    print(df.head())
-    df.to_csv(f"evaluation_ensemble-ft-rerank-bge-large_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+# evaluation_name_list = []
+# evaluation_result_list = []
+# cost_time_list = []
+#
+# for top_k in [1, 2, 3, 4, 5]:
+#     start_time = time.time()
+#     faiss_index = IndexFlatIP(1536)
+#     ensemble_rerank_retriever = EnsembleRerankRetriever(top_k=top_k, faiss_index=faiss_index)
+#     ensemble_rerank_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics,
+#                                                                                retriever=ensemble_rerank_retriever)
+#     ensemble_rerank_eval_results = asyncio.run(ensemble_rerank_retriever_evaluator.aevaluate_dataset(doc_qa_dataset,
+#                                                                                                      show_progress=True))
+#     evaluation_name_list.append(f"ensemble_rerank_top_{top_k}_eval")
+#     evaluation_result_list.append(ensemble_rerank_eval_results)
+#     faiss_index.reset()
+#     cost_time_list.append((time.time() - start_time) * 1000)
+#
+#     print("done for ensemble_rerank evaluation!")
+#     df = display_results(evaluation_name_list, evaluation_result_list)
+#     df['cost_time'] = cost_time_list
+#     print(df.head())
+#     df.to_csv(f"evaluation_ensemble-ft-rerank-bge-large_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # query rewrite ensemble retrieve
 # evaluation_name_list = []

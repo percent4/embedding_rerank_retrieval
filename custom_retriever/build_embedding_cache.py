@@ -71,8 +71,8 @@ class EmbeddingCache(object):
     @staticmethod
     def load(query_write=False):
         current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        queries_embedding_data = np.load(os.path.join(current_dir, "data/queries_openai_embedding.npy"))
-        corpus_embedding_data = np.load(os.path.join(current_dir, "data/corpus_openai_embedding.npy"))
+        queries_embedding_data = np.load(os.path.join(current_dir, "data/queries_jina_base_zh_embedding.npy"))
+        corpus_embedding_data = np.load(os.path.join(current_dir, "data/corpus_jina_base_zh_late_chunking_embedding.npy"))
         query_embedding_dict = {}
         with open(os.path.join(current_dir, "data/doc_qa_test.json"), "r", encoding="utf-8") as f:
             content = json.loads(f.read())

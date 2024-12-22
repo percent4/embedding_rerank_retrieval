@@ -20,6 +20,8 @@ Retrieve Method：
 
 ## 数据
 
+参考`data/doc_qa_test.json`文件，格式以LlamaIndex框架为标准。
+
 ## 评估结果
 
 BM25 Retriever Evaluation:
@@ -250,3 +252,10 @@ HyDE（全称Hypothetical Document Embeddings）是RAG中的一种技术，它�
 > 1985年6月，美国半导体产业贸易保护的调子开始升高。美国半导体工业协会向国会递交一份正式的“301条款”文本，要求美国政府制止日本公司的倾销行为。民意调查显示，68%的美国人认为日本是美国最大的威胁。在舆论的引导和半导体工业协会的推动下，美国政府将信息产业定为可以动用国家安全借口进行保护的新兴战略产业，半导体产业成为美日贸易战的焦点。1985年10月，美国商务部出面指控日本公司倾销256K和1M内存。一年后，日本通产省被迫与美国商务部签署第一次《美日半导体协议》。
 
 从中可以看出，大模型的回答是正确的，美国商务部这个关键词发挥了重要作用，因此，HyDE对于特定的query有召回效果提升。
+
+
+## Late Chunking探索
+
+1. 中文Late-Chunking例子: late_chunking/jina_zh_late_chunking.ipynb
+2. 使用Gradio实现中文Late-Chunking服务: late_chunking/late_chunking_gradio_server.py
+3. 在RAG过程中，使用Late-Chunking提升召回效果，保证回复质量: late_chunking/my_late_chunking_exp.ipynb
