@@ -197,9 +197,9 @@ google-embedding([gemini-embedding-001](https://ai.google.dev/gemini-api/docs/em
 | gemini-embedding-001_top_4_eval | 0.9065420560747663 | 0.7980269989615782 | 107.85269737243652 |
 | gemini-embedding-001_top_5_eval | 0.9283489096573209 | 0.8023883696780895 | 106.5373420715332  |
 
-![不同Embedding模型之间的Hit Rate比较](https://s2.loli.net/2024/02/04/9ZHclTtyBN6CM8n.png)
+![不同Embedding模型之间的Hit Rate比较](https://s2.loli.net/2025/07/22/knMRV5QjJaKb4lv.png)
 
-![不同Embedding模型之间的MRR比较](https://s2.loli.net/2024/02/04/6UGQpCdlLoDAKiP.png)
+![不同Embedding模型之间的MRR比较](https://s2.loli.net/2025/07/22/At5QGrhET2FWlbR.png)
 
 ## 可视化分析
 
