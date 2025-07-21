@@ -17,6 +17,7 @@ Retrieve Method：
 4. [NLP（八十六）RAG框架Retrieve阶段的Embedding模型微调](https://mp.weixin.qq.com/s?__biz=MzU2NTYyMDk5MQ==&mid=2247486333&idx=1&sn=29d00d472647bc5d6e336bec22c88139&chksm=fcb9b2edcbce3bfb42ea149d96fb1296b10a79a60db7ad2da01b85ab223394191205426bc025&token=1376257911&lang=zh_CN#rd)
 5. [NLP（一百零一）Embedding模型微调实践](https://mp.weixin.qq.com/s/lJ3Mycjw1G99T08r8c7dSQ)
 6. [NLP（一百零二）ReRank模型微调实践](https://mp.weixin.qq.com/s/RiPYANTyEgFtIIFHaKq3Rg)
+7. [NLP（一百零九）Embedding中的Late Chunking（迟分）策略](https://mp.weixin.qq.com/s/7mL6fpTCycdC096Zqv14Ag?token=1488274904&lang=zh_CN)
 
 ## 数据
 
@@ -34,7 +35,7 @@ BM25 Retriever Evaluation:
 | bm25_top_4_eval | 0.9158878504672897 | 0.8450155763239875 | 420.72606086730957 |
 | bm25_top_5_eval | 0.940809968847352  | 0.8500000000000001 | 388.5960578918457  |
 
-Embedding Retriever Evaluation:
+Embedding(OpenAI) Retriever Evaluation:
 
 | retrievers           | hit_rate           | mrr                | cost_time          |
 |----------------------|--------------------|--------------------|--------------------|
@@ -186,6 +187,16 @@ bge-large-embedding-finetune:
 | embedding_top_4_eval | 0.9376947040498442 | 0.8364485981308412 | 49.448251724243164 |
 | embedding_top_5_eval | 0.9376947040498442 | 0.8364485981308412 | 57.805776596069336 |
 
+google-embedding([gemini-embedding-001](https://ai.google.dev/gemini-api/docs/embeddings?hl=zh-cn))
+
+| retrievers                      | hit_rate           | mrr                | cost_time          |
+|---------------------------------|--------------------|--------------------|--------------------|
+| gemini-embedding-001_top_1_eval | 0.719626168224299  | 0.719626168224299  | 145.71285247802734 |
+| gemini-embedding-001_top_2_eval | 0.8286604361370716 | 0.7741433021806854 | 96.75407409667969  |
+| gemini-embedding-001_top_3_eval | 0.881619937694704  | 0.7917964693665628 | 99.96414184570312  |
+| gemini-embedding-001_top_4_eval | 0.9065420560747663 | 0.7980269989615782 | 107.85269737243652 |
+| gemini-embedding-001_top_5_eval | 0.9283489096573209 | 0.8023883696780895 | 106.5373420715332  |
+
 ![不同Embedding模型之间的Hit Rate比较](https://s2.loli.net/2024/02/04/9ZHclTtyBN6CM8n.png)
 
 ![不同Embedding模型之间的MRR比较](https://s2.loli.net/2024/02/04/6UGQpCdlLoDAKiP.png)
@@ -259,3 +270,6 @@ HyDE（全称Hypothetical Document Embeddings）是RAG中的一种技术，它�
 1. 中文Late-Chunking例子: late_chunking/jina_zh_late_chunking.ipynb
 2. 使用Gradio实现中文Late-Chunking服务: late_chunking/late_chunking_gradio_server.py
 3. 在RAG过程中，使用Late-Chunking提升召回效果，保证回复质量: late_chunking/my_late_chunking_exp.ipynb
+
+## Query Rewrite对于Retrieve效果影响的探索
+

@@ -101,6 +101,14 @@ if __name__ == '__main__':
                                        "late_chunking_text", "late_chunking_score"],
                               label="Retrieve Result",
                               wrap=True)
+        examples = gr.Examples(
+            examples=[
+                ["王安石是哪里人？",
+                 "王安石（1021年12月19日－1086年5月21日），字介甫，号半山。抚州临川县（今属江西省抚州市）人。中国北宋时期政治家、文学家、思想家、改革家。庆历二年（1042年），王安石中进士，历任扬州签判、鄞县知县、舒州通判等职，政绩显著。宋仁宗末年，曾作《上仁宗皇帝言事书》，要求对宋初以来的法度进行全盘改革，但未被采纳。",
+                 "。"]
+            ],
+            inputs=[query, text, sep]
+        )
 
         submit.click(fn=embedding_retriever,
                      inputs=[query, text, sep],

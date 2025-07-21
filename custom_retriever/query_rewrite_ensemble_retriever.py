@@ -2,10 +2,6 @@
 # @place: Pudong, Shanghai
 # @file: query_rewrite_ensemble_retriever.py
 # @time: 2023/12/28 13:49
-# -*- coding: utf-8 -*-
-# @place: Pudong, Shanghai
-# @file: ensemble_retriever.py
-# @time: 2023/12/26 18:50
 import json
 from typing import List
 from operator import itemgetter

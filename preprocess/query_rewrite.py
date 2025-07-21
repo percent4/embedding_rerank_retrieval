@@ -10,14 +10,17 @@ import requests
 import numpy as np
 from tqdm import tqdm
 from retry import retry
+from dotenv import load_dotenv
 
-from llama_index.llms import OpenAI, ChatMessage
+from llama_index.llms import OpenAI
 from llama_index import PromptTemplate
 
-llm = OpenAI(model="gpt-3.5-turbo")
+load_dotenv(dotenv_path="../late_chunking/.env")
+
+llm = OpenAI(model="gpt-4", api_key=os.getenv("OPENAI_API_KEY"))
 
 query_gen_prompt_str = (
-    "为下面的问题提供{num_queries}个查询改写，使之能更好地适应搜索引擎。每行一个改写结果，以-开头，当涉及到缩写时，要提供全称。\n"
+    "为下面的问题提供{num_queries}个查询改写，每行一个改写结果，以- 开头。\n"
     "问题：{query} \n"
     "答案："
 )
@@ -48,7 +51,7 @@ if __name__ == '__main__':
     # query = "半导体制造设备市场美、日、荷各占多少份额？"
     # query = "尼康和佳能的光刻机在哪个市场占优势？"
     # print(generate_queries(llm, query, num_queries=2))
-    num_queries = 2
+    num_queries = 3
     with open("../data/doc_qa_test.json", "r", encoding="utf-8") as f:
         content = json.loads(f.read())
     queries = list(content["queries"].values())

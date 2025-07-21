@@ -4,3 +4,7 @@ evaluation/*.html
 */__pycache__
 evaluation/tmp*
 late_chunking/.env
+data/*.npy
+*/.env
+.DS_Store
+.vscode

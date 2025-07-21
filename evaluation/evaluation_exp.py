@@ -5,7 +5,12 @@
 import asyncio
 import time
 import sys
-sys.path.append("../")
+import os
+
+# 添加项目根目录到Python路径
+current_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(current_dir)
+sys.path.insert(0, project_root)
 
 import pandas as pd
 from datetime import datetime
@@ -14,6 +19,7 @@ from llama_index.evaluation import RetrieverEvaluator
 from llama_index.finetuning.embeddings.common import EmbeddingQAFinetuneDataset
 
 from custom_retriever.bm25_retriever import CustomBM25Retriever
+from custom_retriever.qr_bm25_retriever import QueryRewriteBM25Retriever
 from custom_retriever.vector_store_retriever import VectorSearchRetriever
 from custom_retriever.ensemble_retriever import EnsembleRetriever
 from custom_retriever.ensemble_rerank_retriever import EnsembleRerankRetriever
@@ -44,7 +50,7 @@ def display_results(name_list, eval_results_list):
     return metric_df
 
 
-doc_qa_dataset = EmbeddingQAFinetuneDataset.from_json("../data/doc_qa_test.json")
+doc_qa_dataset = EmbeddingQAFinetuneDataset.from_json("data/doc_qa_test.json")
 metrics = ["mrr", "hit_rate"]
 # bm25 retrieve
 # evaluation_name_list = []
@@ -72,11 +78,11 @@ cost_time_list = []
 
 for top_k in [1, 2, 3, 4, 5]:
     start_time = time.time()
-    faiss_index = IndexFlatIP(768)
+    faiss_index = IndexFlatIP(3072)
     embedding_retriever = VectorSearchRetriever(top_k=top_k, faiss_index=faiss_index)
     embedding_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics, retriever=embedding_retriever)
     embedding_eval_results = asyncio.run(embedding_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
-    evaluation_name_list.append(f"late_chunking_embedding_top_{top_k}_eval")
+    evaluation_name_list.append(f"gemini-embedding-001_top_{top_k}_eval")
     evaluation_result_list.append(embedding_eval_results)
     faiss_index.reset()
     cost_time_list.append((time.time() - start_time) * 1000)
@@ -85,7 +91,7 @@ print("done for embedding evaluation!")
 df = display_results(evaluation_name_list, evaluation_result_list)
 df['cost_time'] = cost_time_list
 print(df.head())
-df.to_csv(f"evaluation_jina_late_chunking_embedding_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
+df.to_csv(f"evaluation_gemini-embedding-001_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
 # ensemble retrieve
 # evaluation_name_list = []
@@ -156,3 +162,21 @@ df.to_csv(f"evaluation_jina_late_chunking_embedding_{datetime.now().strftime('%Y
 # print(df.head())
 # df.to_csv(f"evaluation_query-rewrite-ensemble_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)
 
+# query rewrite bm25 retrieve
+# evaluation_name_list = []
+# evaluation_result_list = []
+# cost_time_list = []
+# for top_k in [1, 2, 3, 4, 5]:
+#     start_time = time.time()
+#     qr_bm25_retriever = QueryRewriteBM25Retriever(top_k=top_k)
+#     qr_bm25_retriever_evaluator = RetrieverEvaluator.from_metric_names(metrics, retriever=qr_bm25_retriever)
+#     qr_bm25_eval_results = asyncio.run(qr_bm25_retriever_evaluator.aevaluate_dataset(doc_qa_dataset))
+#     evaluation_name_list.append(f"qr_bm25_top_{top_k}_eval")
+#     evaluation_result_list.append(qr_bm25_eval_results)
+#     cost_time_list.append((time.time() - start_time) * 1000)
+
+# print("done for query rewrite bm25 evaluation!")
+# df = display_results(evaluation_name_list, evaluation_result_list)
+# df['cost_time'] = cost_time_list
+# print(df.head())
+# df.to_csv(f"evaluation_qr_bm25_{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}.csv", encoding="utf-8", index=False)

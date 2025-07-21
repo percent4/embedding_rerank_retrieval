@@ -11,6 +11,11 @@ import requests
 import numpy as np
 from retry import retry
 from tqdm import tqdm
+from google import genai
+from google.genai import types
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 class EmbeddingCache(object):
@@ -53,16 +58,29 @@ class EmbeddingCache(object):
         embedding = response.json()["data"][0]["embedding"]
         embedding_norm = math.sqrt(sum([i**2 for i in embedding]))
         return [i/embedding_norm for i in embedding]
+    
+    @staticmethod
+    @retry(exceptions=Exception, tries=3, max_delay=20)
+    def get_google_embedding(req_text: str):
+        client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+
+        result = client.models.embed_content(
+            model="gemini-embedding-001",
+            contents=req_text,
+            config=types.EmbedContentConfig(task_type="SEMANTIC_SIMILARITY", output_dimensionality=3072)
+        )
+        return result.embeddings[0].values
 
     def build_with_context(self, context_type: str):
-        with open("../data/doc_qa_test.json", "r", encoding="utf-8") as f:
+        with open("data/doc_qa_test.json", "r", encoding="utf-8") as f:
             content = json.loads(f.read())
         queries = list(content[context_type].values())
         query_num = len(queries)
-        embedding_data = np.empty(shape=[query_num, 768])
+        embedding_data = np.empty(shape=[query_num, 3072])
         for i in tqdm(range(query_num), desc="generate embedding"):
-            embedding_data[i] = self.get_bge_embedding(queries[i])
-        np.save(f"../data/{context_type}_bce_embedding.npy", embedding_data)
+            # embedding_data[i] = self.get_bge_embedding(queries[i])
+            embedding_data[i] = self.get_google_embedding(queries[i])
+        np.save(f"data/{context_type}_google_embedding.npy", embedding_data)
 
     def build(self):
         self.build_with_context("queries")
@@ -71,8 +89,8 @@ class EmbeddingCache(object):
     @staticmethod
     def load(query_write=False):
         current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        queries_embedding_data = np.load(os.path.join(current_dir, "data/queries_jina_base_zh_embedding.npy"))
-        corpus_embedding_data = np.load(os.path.join(current_dir, "data/corpus_jina_base_zh_late_chunking_embedding.npy"))
+        queries_embedding_data = np.load(os.path.join(current_dir, "data/queries_google_embedding.npy"))
+        corpus_embedding_data = np.load(os.path.join(current_dir, "data/corpus_google_embedding.npy"))
         query_embedding_dict = {}
         with open(os.path.join(current_dir, "data/doc_qa_test.json"), "r", encoding="utf-8") as f:
             content = json.loads(f.read())

@@ -21,8 +21,8 @@ for i in range(len(data['corpus'])):
     corpus.append(data['corpus'][f'node_{i+1}'])
 
 
-# for i, _ in enumerate(corpus):
-#     print(f'node_{i+1}: {_}')
+for i, _ in enumerate(corpus):
+    print(f'node_{i+1}: {_}')
 
 node_id_dict = {}
 _id = 0
@@ -81,9 +81,15 @@ def merge_closest_to_n(arr, n):
     return result
 
 
-cluster_token_num_list = merge_closest_to_n(corpus_token_num_list, CLUSTER_MAX_TOKEN_NUM)
+known_merge_list = [[1, 20], [21, 25], [26, 27], [28, 36], [37, 41], [42, 44], [45, 48], [49, 53], [54, 64], [65, 72], [73, 86], [87, 97]]
+cluster_token_num_list = []
+for merge_list in known_merge_list:
+    cluster_token_num_list.append([corpus_token_num_list[i] for i in range(merge_list[0] - 1, merge_list[1])])
+
+cluster_token_num_list.extend(merge_closest_to_n(corpus_token_num_list[97: ], CLUSTER_MAX_TOKEN_NUM))
 print(cluster_token_num_list)
 print(len(cluster_token_num_list))
+
 
 # 对聚合后的cluster_token_num_list进行分组，获取拼接后的text和span_list
 cluster_text_list = []
@@ -141,6 +147,7 @@ embedding_sum = 0
 embedding_data = np.empty(shape=[span_num, 768])
 cnt = 0
 for input_text, spans in tqdm(zip(cluster_text_list, span_list_list), desc="generate embedding"):
+    print(input_text, spans)
     inputs = tokenizer(input_text, return_tensors='pt', max_length=CLUSTER_MAX_TOKEN_NUM, truncation=True)
     model_output = model(**inputs)
     embeddings = late_chunking(model_output, [spans])[0]
@@ -150,9 +157,10 @@ for input_text, spans in tqdm(zip(cluster_text_list, span_list_list), desc="gene
     for embedding in embeddings:
         # 对embedding进行归一化, 使其范数为1
         embedding_norm = embedding / np.linalg.norm(embedding)
+        print(f"_id: {id_node_dict[cnt]}")
         embedding_data[id_node_dict[cnt]] = embedding_norm
         cnt += 1
-        print(f"cnt: {cnt}")
+        # print(f"cnt: {cnt}")
 
 
 np.save(f"../data/corpus_jina_base_zh_late_chunking_embedding.npy", embedding_data)
