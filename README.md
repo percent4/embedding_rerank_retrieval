@@ -201,6 +201,8 @@ google-embedding([gemini-embedding-001](https://ai.google.dev/gemini-api/docs/em
 
 ![不同Embedding模型之间的MRR比较](https://s2.loli.net/2025/07/22/At5QGrhET2FWlbR.png)
 
+![google-embedding-001模型不同向量维度的Hit Rate与MRR比较](https://s2.loli.net/2025/07/24/HqcZFYzmLQMdV2a.png)
+
 ## 可视化分析
 
 ![retrieval_website.png](https://s2.loli.net/2023/12/30/mZkJ37KRHTFSsyO.png)

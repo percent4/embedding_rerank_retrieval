@@ -67,7 +67,7 @@ class EmbeddingCache(object):
         result = client.models.embed_content(
             model="gemini-embedding-001",
             contents=req_text,
-            config=types.EmbedContentConfig(task_type="SEMANTIC_SIMILARITY", output_dimensionality=3072)
+            config=types.EmbedContentConfig(task_type="SEMANTIC_SIMILARITY", output_dimensionality=1536)
         )
         return result.embeddings[0].values
 
@@ -76,7 +76,7 @@ class EmbeddingCache(object):
             content = json.loads(f.read())
         queries = list(content[context_type].values())
         query_num = len(queries)
-        embedding_data = np.empty(shape=[query_num, 3072])
+        embedding_data = np.empty(shape=[query_num, 1536])
         for i in tqdm(range(query_num), desc="generate embedding"):
             # embedding_data[i] = self.get_bge_embedding(queries[i])
             embedding_data[i] = self.get_google_embedding(queries[i])
